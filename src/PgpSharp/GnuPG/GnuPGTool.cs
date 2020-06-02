@@ -34,7 +34,7 @@ namespace PgpSharp.GnuPG
         public Stream ProcessData(StreamDataInput input)
         {
             if (input == null) { throw new ArgumentNullException("input"); }
-            input.Verify();
+            input.CheckRequirements();
 
             // only way to reliably make this work is save to file and process it instead.
             string tempInFile = null;
@@ -82,7 +82,7 @@ namespace PgpSharp.GnuPG
         public void ProcessData(FileDataInput input)
         {
             if (input == null) { throw new ArgumentNullException("input"); }
-            input.Verify();
+            input.CheckRequirements();
             using (var proc = new RedirectedProcess(GnuPGConfig.GnuPGExePath, CreateDataCommandLineArgs(input)))
             {
                 if (proc.Start())

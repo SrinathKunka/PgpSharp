@@ -96,10 +96,10 @@ namespace PgpSharp
         }
 
         /// <summary>
-        /// Verifies this input for requirements.
+        /// Checks this input for requirements.
         /// </summary>
         /// <exception cref="PgpSharp.PgpException"></exception>
-        public virtual void Verify()
+        public virtual void CheckRequirements()
         {
             if (NeedsPassphrase) RequirePasspharse();
             if (NeedsRecipient) RequireRecipient();
@@ -146,17 +146,17 @@ namespace PgpSharp
         public Stream InputData { get; set; }
 
         /// <summary>
-        /// Verifies this input for requirements.
+        /// Checks this input for requirements.
         /// </summary>
         /// <exception cref="PgpSharp.PgpException">Input data is required.</exception>
-        public override void Verify()
+        public override void CheckRequirements()
         {
             if (InputData == null)
             {
                 throw new PgpException("Input data is required.");
             }
 
-            base.Verify();
+            base.CheckRequirements();
         }
     }
 
@@ -182,14 +182,14 @@ namespace PgpSharp
         public string OutputFile { get; set; }
 
         /// <summary>
-        /// Verifies this input for requirements.
+        /// Checks this input for requirements.
         /// </summary>
         /// <exception cref="PgpSharp.PgpException">
         /// Input file is required.
         /// or
         /// Output file is required.
         /// </exception>
-        public override void Verify()
+        public override void CheckRequirements()
         {
             if (string.IsNullOrEmpty(InputFile))
             {
@@ -201,7 +201,7 @@ namespace PgpSharp
                     throw new PgpException("Output file is required.");
             }
 
-            base.Verify();
+            base.CheckRequirements();
         }
     }
 }
