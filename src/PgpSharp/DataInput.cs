@@ -101,6 +101,7 @@ namespace PgpSharp
         /// <exception cref="PgpSharp.PgpException"></exception>
         public virtual void CheckRequirements()
         {
+            if (Operation <= DataOperation.Invalid) throw new PgpException("No operation specified.");
             if (NeedsPassphrase) RequirePasspharse();
             if (NeedsRecipient) RequireRecipient();
             if (NeedsOriginator) RequireOriginator();

@@ -111,7 +111,7 @@ namespace PgpSharp.GnuPG
         string CreateDataCommandLineArgs(DataInput input)
         {
             // yes to all confirmations, batch for no prompt
-            StringBuilder args = new StringBuilder("--yes --batch ");
+            StringBuilder args = new StringBuilder("--yes --batch --no-greeting ");
             if (input.Armor)
             {
                 args.Append("-a ");
@@ -119,7 +119,8 @@ namespace PgpSharp.GnuPG
 
             if (input.AlwaysTrustPublicKey)
             {
-                args.Append("--always-trust ");
+                //args.Append("--always-trust ");
+                args.Append("--trust-model always ");
             }
 
             if (!string.IsNullOrWhiteSpace(KeyringFolder))
@@ -166,7 +167,7 @@ namespace PgpSharp.GnuPG
             if (input.NeedsPassphrase)
             {
                 // will enter passphrase via std in
-                args.Append("--passphrase-fd 0 ");
+                args.Append("--pinentry-mode loopback --passphrase-fd 0 ");
             }
 
             var fileInput = input as FileDataInput;
