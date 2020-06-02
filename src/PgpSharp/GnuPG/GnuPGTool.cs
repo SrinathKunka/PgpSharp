@@ -22,56 +22,56 @@ namespace PgpSharp.GnuPG
         /// </value>
         public string KeyringFolder { get; set; }
 
-        /// <summary>
-        /// Processes data with stream input.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>
-        /// Output stream.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">input</exception>
-        /// <exception cref="PgpException"></exception>
-        public Stream ProcessData(StreamDataInput input)
-        {
-            if (input == null) { throw new ArgumentNullException("input"); }
-            input.CheckRequirements();
+        ///// <summary>
+        ///// Processes data with stream input.
+        ///// </summary>
+        ///// <param name="input">The input.</param>
+        ///// <returns>
+        ///// Output stream.
+        ///// </returns>
+        ///// <exception cref="System.ArgumentNullException">input</exception>
+        ///// <exception cref="PgpException"></exception>
+        //public Stream ProcessData(StreamDataInput input)
+        //{
+        //    if (input == null) { throw new ArgumentNullException("input"); }
+        //    input.CheckRequirements();
 
-            // only way to reliably make this work is save to file and process it instead.
-            string tempInFile = null;
-            string tempOutFile = null;
-            try
-            {
-                tempInFile = Path.GetTempFileName();
-                tempOutFile = Path.GetTempFileName();
+        //    // only way to reliably make this work is save to file and process it instead.
+        //    string tempInFile = null;
+        //    string tempOutFile = null;
+        //    try
+        //    {
+        //        tempInFile = Path.GetTempFileName();
+        //        tempOutFile = Path.GetTempFileName();
 
-                using (var fs = File.OpenWrite(tempInFile))
-                {
-                    input.InputData.CopyTo(fs);
-                }
-                var newArg = new FileDataInput
-                {
-                    Armor = input.Armor,
-                    AlwaysTrustPublicKey = input.AlwaysTrustPublicKey,
-                    InputFile = tempInFile,
-                    Operation = input.Operation,
-                    Originator = input.Originator,
-                    OutputFile = tempOutFile,
-                    Passphrase = input.Passphrase,
-                    Recipient = input.Recipient
-                };
-                ProcessData(newArg);
-                return new TempFileStream(tempOutFile);
-            }
-            catch
-            {
-                IOUtility.DeleteFiles(tempOutFile);
-                throw;
-            }
-            finally
-            {
-                IOUtility.DeleteFiles(tempInFile);
-            }
-        }
+        //        using (var fs = File.OpenWrite(tempInFile))
+        //        {
+        //            input.InputData.CopyTo(fs);
+        //        }
+        //        var newArg = new FileDataInput
+        //        {
+        //            Armor = input.Armor,
+        //            AlwaysTrustPublicKey = input.AlwaysTrustPublicKey,
+        //            InputFile = tempInFile,
+        //            Operation = input.Operation,
+        //            Originator = input.Originator,
+        //            OutputFile = tempOutFile,
+        //            Passphrase = input.Passphrase,
+        //            Recipient = input.Recipient
+        //        };
+        //        ProcessData(newArg);
+        //        return new TempFileStream(tempOutFile);
+        //    }
+        //    catch
+        //    {
+        //        IOUtility.DeleteFiles(tempOutFile);
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        IOUtility.DeleteFiles(tempInFile);
+        //    }
+        //}
 
         /// <summary>
         /// Processes data with file input.

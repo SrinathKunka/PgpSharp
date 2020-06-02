@@ -122,79 +122,79 @@ namespace PgpSharp.GnuPG
         }
 
 
-        [TestMethod]
-        public void Can_Encrypt_And_Decrypt_Text_Stream()
-        {
-            string origFile = Path.Combine(__samplesFolder, "OriginalText.txt");
-            using (var origFs = File.OpenRead(origFile))
-            {
-                var encryptArg = new StreamDataInput
-                {
-                    Armor = true,
-                    AlwaysTrustPublicKey = false,
-                    InputData = origFs,
-                    Operation = DataOperation.Encrypt,
-                    Recipient = TESTER_NAME,
-                };
+        //[TestMethod]
+        //public void Can_Encrypt_And_Decrypt_Text_Stream()
+        //{
+        //    string origFile = Path.Combine(__samplesFolder, "OriginalText.txt");
+        //    using (var origFs = File.OpenRead(origFile))
+        //    {
+        //        var encryptArg = new StreamDataInput
+        //        {
+        //            Armor = true,
+        //            AlwaysTrustPublicKey = false,
+        //            InputData = origFs,
+        //            Operation = DataOperation.Encrypt,
+        //            Recipient = TESTER_NAME,
+        //        };
 
-                IPgpTool tool = new GnuPGTool();
+        //        IPgpTool tool = new GnuPGTool();
 
-                using (var encryptStream = tool.ProcessData(encryptArg))
-                {
-                    var decryptArg = new StreamDataInput
-                    {
-                        InputData = encryptStream,
-                        Operation = DataOperation.Decrypt,
-                        Passphrase = __passphrase
-                    };
-                    using (var decryptedStream = tool.ProcessData(decryptArg))
-                    using (StreamReader reader = new StreamReader(decryptedStream))
-                    {
-                        string origText = File.ReadAllText(origFile);
-                        string finalText = reader.ReadToEnd();
-                        Assert.AreEqual(origText, finalText, "Roundtrip got diffent text.");
-                    }
-                }
-            }
-        }
+        //        using (var encryptStream = tool.ProcessData(encryptArg))
+        //        {
+        //            var decryptArg = new StreamDataInput
+        //            {
+        //                InputData = encryptStream,
+        //                Operation = DataOperation.Decrypt,
+        //                Passphrase = __passphrase
+        //            };
+        //            using (var decryptedStream = tool.ProcessData(decryptArg))
+        //            using (StreamReader reader = new StreamReader(decryptedStream))
+        //            {
+        //                string origText = File.ReadAllText(origFile);
+        //                string finalText = reader.ReadToEnd();
+        //                Assert.AreEqual(origText, finalText, "Roundtrip got diffent text.");
+        //            }
+        //        }
+        //    }
+        //}
 
-        [TestMethod]
-        public void Can_Encrypt_And_Decrypt_Binary_Stream()
-        {
-            string origFile = Path.Combine(__samplesFolder, "OriginalBinary.png");
-            using (var origFs = File.OpenRead(origFile))
-            {
-                var encryptArg = new StreamDataInput
-                {
-                    Armor = true,
-                    AlwaysTrustPublicKey = false,
-                    InputData = origFs,
-                    Operation = DataOperation.Encrypt,
-                    Recipient = TESTER_NAME,
-                };
+        //[TestMethod]
+        //public void Can_Encrypt_And_Decrypt_Binary_Stream()
+        //{
+        //    string origFile = Path.Combine(__samplesFolder, "OriginalBinary.png");
+        //    using (var origFs = File.OpenRead(origFile))
+        //    {
+        //        var encryptArg = new StreamDataInput
+        //        {
+        //            Armor = true,
+        //            AlwaysTrustPublicKey = false,
+        //            InputData = origFs,
+        //            Operation = DataOperation.Encrypt,
+        //            Recipient = TESTER_NAME,
+        //        };
 
-                IPgpTool tool = new GnuPGTool();
+        //        IPgpTool tool = new GnuPGTool();
 
-                using (var encryptStream = tool.ProcessData(encryptArg))
-                {
-                    var decryptArg = new StreamDataInput
-                    {
-                        InputData = encryptStream,
-                        Operation = DataOperation.Decrypt,
-                        Passphrase = __passphrase
-                    };
-                    using (var decryptedStream = tool.ProcessData(decryptArg))
-                    using (MemoryStream testStream = new MemoryStream())
-                    {
-                        decryptedStream.CopyTo(testStream);
+        //        using (var encryptStream = tool.ProcessData(encryptArg))
+        //        {
+        //            var decryptArg = new StreamDataInput
+        //            {
+        //                InputData = encryptStream,
+        //                Operation = DataOperation.Decrypt,
+        //                Passphrase = __passphrase
+        //            };
+        //            using (var decryptedStream = tool.ProcessData(decryptArg))
+        //            using (MemoryStream testStream = new MemoryStream())
+        //            {
+        //                decryptedStream.CopyTo(testStream);
 
-                        byte[] origBytes = File.ReadAllBytes(origFile);
-                        byte[] finalBytes = testStream.ToArray();
-                        CollectionAssert.AreEqual(origBytes, finalBytes, "Roundtrip got diffent bytes.");
-                    }
-                }
-            }
-        }
+        //                byte[] origBytes = File.ReadAllBytes(origFile);
+        //                byte[] finalBytes = testStream.ToArray();
+        //                CollectionAssert.AreEqual(origBytes, finalBytes, "Roundtrip got diffent bytes.");
+        //            }
+        //        }
+        //    }
+        //}
 
 
         [TestMethod]

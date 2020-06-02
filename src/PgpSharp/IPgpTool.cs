@@ -19,12 +19,12 @@ namespace PgpSharp
         /// </value>
         string KeyringFolder { get; set; }
 
-        /// <summary>
-        /// Processes data with stream input.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns>Output stream.</returns>
-        Stream ProcessData(StreamDataInput input);
+        ///// <summary>
+        ///// Processes data with stream input.
+        ///// </summary>
+        ///// <param name="input">The input.</param>
+        ///// <returns>Output stream.</returns>
+        //Stream ProcessData(StreamDataInput input);
 
         /// <summary>
         /// Processes data with file input.

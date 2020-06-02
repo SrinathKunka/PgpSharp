@@ -133,33 +133,33 @@ namespace PgpSharp
         }
     }
 
-    /// <summary>
-    /// Input object for processing a stream.
-    /// </summary>
-    public class StreamDataInput : DataInput
-    {
-        /// <summary>
-        /// Gets or sets the input data stream.
-        /// </summary>
-        /// <value>
-        /// The input data.
-        /// </value>
-        public Stream InputData { get; set; }
+    ///// <summary>
+    ///// Input object for processing a stream.
+    ///// </summary>
+    //public class StreamDataInput : DataInput
+    //{
+    //    /// <summary>
+    //    /// Gets or sets the input data stream.
+    //    /// </summary>
+    //    /// <value>
+    //    /// The input data.
+    //    /// </value>
+    //    public Stream InputData { get; set; }
 
-        /// <summary>
-        /// Checks this input for requirements.
-        /// </summary>
-        /// <exception cref="PgpSharp.PgpException">Input data is required.</exception>
-        public override void CheckRequirements()
-        {
-            if (InputData == null)
-            {
-                throw new PgpException("Input data is required.");
-            }
+    //    /// <summary>
+    //    /// Checks this input for requirements.
+    //    /// </summary>
+    //    /// <exception cref="PgpSharp.PgpException">Input data is required.</exception>
+    //    public override void CheckRequirements()
+    //    {
+    //        if (InputData == null)
+    //        {
+    //            throw new PgpException("Input data is required.");
+    //        }
 
-            base.CheckRequirements();
-        }
-    }
+    //        base.CheckRequirements();
+    //    }
+    //}
 
     /// <summary>
     /// Input object for processing a file.
