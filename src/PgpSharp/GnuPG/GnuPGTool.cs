@@ -128,7 +128,19 @@ namespace PgpSharp.GnuPG
             }
 
             // only supports 4 main operations here
-            if (input.Operation.HasFlag(DataOperation.Encrypt))
+            if (input.Operation.HasFlag(DataOperation.Verify))
+            {
+                args.Append("--verify ");
+            }
+            else if (input.Operation.HasFlag(DataOperation.Decrypt))
+            {
+                args.Append("--decrypt ");
+            }
+            else if (input.Operation.HasFlag(DataOperation.DetachSign))
+            {
+                args.Append("--detach-sign ");
+            }
+            else if (input.Operation.HasFlag(DataOperation.Encrypt))
             {
                 args.Append("--encrypt ");
 
@@ -140,18 +152,6 @@ namespace PgpSharp.GnuPG
                 {
                     args.Append("--clearsign ");
                 }
-            }
-            else if (input.Operation.HasFlag(DataOperation.Decrypt))
-            {
-                args.Append("--decrypt ");
-            }
-            else if (input.Operation.HasFlag(DataOperation.Verify))
-            {
-                args.Append("--verify ");
-            }
-            else if (input.Operation.HasFlag(DataOperation.DetachSign))
-            {
-                args.Append("--detach-sign ");
             }
 
             if (input.NeedsRecipient)

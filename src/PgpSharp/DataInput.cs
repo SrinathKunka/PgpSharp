@@ -197,7 +197,8 @@ namespace PgpSharp
             }
             if (string.IsNullOrEmpty(OutputFile))
             {
-                throw new PgpException("Output file is required.");
+                if (!Operation.HasFlag(DataOperation.Verify))
+                    throw new PgpException("Output file is required.");
             }
 
             base.Verify();
