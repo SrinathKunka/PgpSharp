@@ -47,7 +47,7 @@ namespace PgpSharp
         ///   <c>true</c> to always trust the public key; otherwise, <c>false</c>.
         /// </value>
         public bool AlwaysTrustPublicKey { get; set; }
-       
+
 
         /// <summary>
         /// Gets or sets the passphrase for the operation. Required to sign and decrypt.
@@ -58,24 +58,40 @@ namespace PgpSharp
         public SecureString Passphrase { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether a passphrase is required for the specified <see cref="Operation"/>.
+        /// Whether a passphrase is required for the current <see cref="Operation"/>.
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if passphrase is needed; otherwise, <c>false</c>.
-        /// </value>
         public bool NeedsPassphrase
         {
             get
             {
-                switch (Operation)
-                {
-                    case DataOperation.Decrypt:
-                    case DataOperation.SignAndEncrypt:
-                    case DataOperation.Sign:
-                    case DataOperation.ClearSign:
-                        return true;
-                }
-                return false;
+                return Operation.HasFlag(DataOperation.Decrypt) ||
+                    Operation.HasFlag(DataOperation.Sign) ||
+                    Operation.HasFlag(DataOperation.ClearSign) ||
+                    Operation.HasFlag(DataOperation.DetachSign);
+            }
+        }
+
+        /// <summary>
+        /// Whether recipient is required for the current <see cref="Operation"/>.
+        /// </summary>
+        public bool NeedsRecipient
+        {
+            get
+            {
+                return Operation.HasFlag(DataOperation.Encrypt);
+            }
+        }
+
+        /// <summary>
+        /// Whether originator is required for the current <see cref="Operation"/>.
+        /// </summary>
+        public bool NeedsOriginator
+        {
+            get
+            {
+                return Operation.HasFlag(DataOperation.Sign) ||
+                    Operation.HasFlag(DataOperation.ClearSign) ||
+                    Operation.HasFlag(DataOperation.DetachSign);
             }
         }
 
@@ -85,27 +101,10 @@ namespace PgpSharp
         /// <exception cref="PgpSharp.PgpException"></exception>
         public virtual void Verify()
         {
-            switch (Operation)
-            {
-                case DataOperation.Decrypt:
-                    RequirePasspharse();
-                    break;
-                case DataOperation.Encrypt:
-                    RequireRecipient();
-                    break;
-                case DataOperation.Sign:
-                case DataOperation.ClearSign:
-                    RequireOriginator();
-                    RequirePasspharse();
-                    break;
-                case DataOperation.SignAndEncrypt:
-                    RequireOriginator();
-                    RequireRecipient();
-                    RequirePasspharse();
-                    break;
-                default:
-                    throw new PgpException($"Unknown operation {Operation}.");
-            }
+            if (NeedsPassphrase) RequirePasspharse();
+            if (NeedsRecipient) RequireRecipient();
+            if (NeedsOriginator) RequireOriginator();
+
         }
 
         private void RequirePasspharse()

@@ -6,30 +6,45 @@ using System.Text;
 namespace PgpSharp
 {
     /// <summary>
-    /// Defines the supported data operations.
+    /// Defines the supported data operations. Certain operations can be combined.
     /// </summary>
+    [Flags]
     public enum DataOperation
     {
         /// <summary>
-        /// Signs the data.
+        /// Unspecified operation. Cannot be used.
         /// </summary>
-        Sign,
+        Invalid = 0,
         /// <summary>
-        /// Signs the data with clear text signature.
+        /// Signs the data. Exclusive with <see cref="ClearSign"/>.
+        /// Can be combined with <see cref="Encrypt"/>.
         /// </summary>
-        ClearSign,
-        //Verify,
+        Sign = 0x1,
         /// <summary>
-        /// Encrypts the data.
+        /// Signs the data with clear text signature. Exclusive with <see cref="Sign"/>.
+        /// Can be combined with <see cref="Encrypt"/>.
         /// </summary>
-        Encrypt,
+        ClearSign = 0x2,
         /// <summary>
-        /// Decrypt the data.
+        /// Signs the data with signature in a separate file (usually [filename].sig).
+        /// Cannot be combined.
         /// </summary>
-        Decrypt,
+        DetachSign = 0x4,
+        /// <summary>
+        /// Encrypts the data. Can be combined with <see cref="Sign"/> or <see cref="ClearSign"/>.
+        /// </summary>
+        Encrypt = 0x8,
+        /// <summary>
+        /// Decrypt the data. Cannot be combined.
+        /// </summary>
+        Decrypt = 0x10,
+        /// <summary>
+        /// Verifies a signed data. Cannot be combined.
+        /// </summary>
+        Verify = 0x20,
         /// <summary>
         /// Sign and encrypt the data.
         /// </summary>
-        SignAndEncrypt
+        SignAndEncrypt = Sign | Encrypt
     }
 }

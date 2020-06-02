@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Text;
 
 namespace PgpSharp.GnuPG
@@ -119,7 +116,7 @@ namespace PgpSharp.GnuPG
             {
                 args.Append("-a ");
             }
-            
+
             if (input.AlwaysTrustPublicKey)
             {
                 args.Append("--always-trust ");
@@ -129,29 +126,41 @@ namespace PgpSharp.GnuPG
             {
                 args.AppendFormat("--homedir \"{0}\" ", KeyringFolder);
             }
-            switch (input.Operation)
+
+            // only supports 4 main operations here
+            if (input.Operation.HasFlag(DataOperation.Encrypt))
             {
-                case DataOperation.Decrypt:
-                    // [d]ecrypt
-                    args.Append("-d ");
-                    break;
-                case DataOperation.Encrypt:
-                    // [e]ncrypt for [r]ecipient
-                    args.AppendFormat("-e -r \"{0}\" ", input.Recipient);
-                    break;
-                case DataOperation.Sign:
-                    // [s]ign for [u]ser
-                    args.AppendFormat("-s -u \"{0}\" ", input.Originator);
-                    break;
-                case DataOperation.ClearSign:
-                    args.AppendFormat("--clearsign -u \"{0}\" ", input.Originator);
-                    break;
-                case DataOperation.SignAndEncrypt:
-                    args.AppendFormat("-se -r \"{0}\" -u \"{1}\" ", input.Recipient, input.Originator);
-                    break;
-                //case DataOperation.Verify:
-                //    args.Append("--verify ");
-                //    break;
+                args.Append("--encrypt ");
+
+                if (input.Operation.HasFlag(DataOperation.Sign))
+                {
+                    args.Append("--sign ");
+                }
+                else if (input.Operation.HasFlag(DataOperation.ClearSign))
+                {
+                    args.Append("--clearsign ");
+                }
+            }
+            else if (input.Operation.HasFlag(DataOperation.Decrypt))
+            {
+                args.Append("--decrypt ");
+            }
+            else if (input.Operation.HasFlag(DataOperation.Verify))
+            {
+                args.Append("--verify ");
+            }
+            else if (input.Operation.HasFlag(DataOperation.DetachSign))
+            {
+                args.Append("--detach-sign ");
+            }
+
+            if (input.NeedsRecipient)
+            {
+                args.AppendFormat("-r \"{0}\" ", input.Recipient);
+            }
+            if (input.NeedsOriginator)
+            {
+                args.AppendFormat("-u \"{0}\" ", input.Originator);
             }
 
             if (input.NeedsPassphrase)

@@ -15,7 +15,6 @@ namespace PgpSharp.GnuPG
         // Params used to create the test key are:
         // Name: Tester
         // Email: tester@test.com
-        // Comment: for testing purposes only
         // Passphrase: test123
 
         [ClassInitialize]
@@ -36,7 +35,7 @@ namespace PgpSharp.GnuPG
         }
 
         static string __samplesFolder;
-        const string TESTER_NAME = "Tester (for testing purposes only) <tester@test.com>";
+        const string TESTER_NAME = "Tester <tester@test.com>";
         static SecureString __passphrase;
 
 
